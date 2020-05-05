@@ -41,6 +41,30 @@ class Maze:
                 if random.uniform(0, 1.0) < sparseness:
                     self._grid[row][column] = Cell.BLOCKED
 
+    def successors(self, ml: MazeLocation):
+        locations: List[MazeLocation] = []
+
+        # проверяем ячейку сверху от текущей
+        if ml.row + 1 < self._rows and self._grid[ml.row + 1][ml.column] != Cell.BLOCKED:
+            locations.append(MazeLocation(ml.row + 1, ml.column))
+
+        # проверяем ячейку снизу от текущей
+        if ml.row - 1 >= 0 and self._grid[ml.row - 1][ml.column] != Cell.BLOCKED:
+            locations.append(MazeLocation(ml.row - 1, ml.column))
+
+        # проверяем ячейку справа от текущей
+        if ml.column + 1 < self._columns and self._grid[ml.row][ml.column + 1] != Cell.BLOCKED:
+            locations.append(MazeLocation(ml.row, ml.column + 1))
+
+        # проверяем ячейку слева от текущей
+        if ml.column - 1 <= 0 and self._grid[ml.row][ml.column - 1] != Cell.BLOCKED:
+            locations.append(MazeLocation(ml.row, ml.column - 1))
+
+        return locations # возвращаем все возможные ходы из текущей ячейки
+
+    def goal_test(self, ml: MazeLocation) -> bool:
+        return ml == self.goal
+
     def __str__(self) -> str:
         output: str = ''
         for row in self._grid:
