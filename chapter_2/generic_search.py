@@ -42,6 +42,24 @@ def binary_contains(sequence: Sequence[C], key: C) -> bool:
             return True
     return False
 
+# обобщенный стек
+class Stack(Generic[T]):
+    def __init__(self) -> None:
+        self._container: List[T] = []
+
+    @property
+    def empty(self) -> bool:
+        return not self._container
+
+    def push(self, item: T) -> None:
+        self._container.append(item)
+
+    def pop(self) -> T:
+        self._container.pop()
+
+    def __repr__(self) -> str:
+        return repr(self._container)
+
 if __name__ == '__main__':
     print(linear_contains([1, 5, 15, 15, 15, 15, 20], 5)) # True
     print(binary_contains(['a', 'c', 'e', 'x'], 'x')) # True
