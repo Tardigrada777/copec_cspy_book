@@ -2,7 +2,7 @@ from enum import Enum
 from typing import List, NamedTuple, Callable, Optional
 import random
 from math import sqrt
-from generic_search import dfs, node_to_path, Node
+from generic_search import dfs, bfs, node_to_path, Node
 
 
 # одна конкретная ячейка лабиринта
@@ -83,12 +83,27 @@ class Maze:
 if __name__ == '__main__':
     # DFS
     m: Maze = Maze()
+    print('===== Original ======')
     print(m)
+
+    # Тестирование DFS алгоритма
     solution1: Optional[Node[MazeLocation]] = dfs(m.start, m.goal_test, m.successors)
     if solution1 is None:
         print('No solution found using DFS!')
     else:
         path1: List[MazeLocation] = node_to_path(solution1)
         m.mark(path1)
+        print('===== DFS ======')
         print(m)
         m.mark(path1, clear=True)
+
+    # Тестирование BFS алгоритма
+    solution2: Optional[Node[MazeLocation]] = dfs(m.start, m.goal_test, m.successors)
+    if solution2 is None:
+        print('No solution found using BFS!')
+    else:
+        path2: List[MazeLocation] = node_to_path(solution2)
+        m.mark(path2)
+        print('===== BFS ======')
+        print(m)
+        m.mark(path2, clear=True)

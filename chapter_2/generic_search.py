@@ -122,6 +122,30 @@ def dfs(initial: T, goal_test: Callable[[T], bool], successors: Callable[[T], Li
             explored.add(child)
             frontier.push(Node(child, current_node))
     return None # все состояния проверили, пути к цели не нашли
+
+# поиск в ширину
+def bfs(initial: T, goal_test: Callable[[T], bool], successors: Callable[[T], List[T]]) -> Optional[Node[T]]:
+    # frontier - то, что нужно проверить
+    frontier: Queue[Node[T]] = Queue()
+    frontier.push(Node(initial, None))
+
+    # explored - где мы уже побывали
+    explored: Set[T] = {initial}
+
+    # пока есть что просматривать, просматриваем frontier
+    while not frontier.empty:
+        current_node: Node[T] = frontier.pop()
+        current_state: T = current_node.state
+        # если мы нашли искомое, то заканчиваем
+        if goal_test(current_state):
+            return current_node
+        # проверяем куда можно идти дальше
+        for child in successors(current_state):
+            if child in explored: # пропускаем состояния, которые уже исследовали
+                continue
+            explored.add(child)
+            frontier.push(Node(child, current_node))
+    return None # все состояния проверили, пути к цели не нашли
         
 
 
