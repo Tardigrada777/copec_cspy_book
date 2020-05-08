@@ -60,6 +60,25 @@ class Stack(Generic[T]):
     def __repr__(self) -> str:
         return repr(self._container)
 
+# очередь
+class Queue(Generic[T]):
+    def __init__(self):
+        self._container: Deque[T] = Deque()
+
+    @property
+    def empty(self) -> bool:
+        return not self._container
+
+    def push(self, item: T) -> None:
+        self._container.append(item) # добавляем новые элементы в конец (справа)
+
+    def pop(self) -> T:
+        self._container.popleft() # красивый способ извлечь первый (левый) элемент
+
+    def __repr__(self) -> str:
+        return repr(self._container)
+
+
 class Node(Generic[T]):
     def __init__(self, state: T, parent: Optional[Node], cost: float = 0.0, heuristic: float = 0.0) -> None:
         self.state: T = state
