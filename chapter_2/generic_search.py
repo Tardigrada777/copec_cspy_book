@@ -74,7 +74,7 @@ class Queue(Generic[T]):
         self._container.append(item) # добавляем новые элементы в конец (справа)
 
     def pop(self) -> T:
-        self._container.popleft() # красивый способ извлечь первый (левый) элемент
+        return self._container.popleft() # красивый способ извлечь первый (левый) элемент
 
     def __repr__(self) -> str:
         return repr(self._container)
