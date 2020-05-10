@@ -2,7 +2,7 @@ from enum import Enum
 from typing import List, NamedTuple, Callable, Optional
 import random
 from math import sqrt
-from generic_search import dfs, bfs, node_to_path, Node
+from generic_search import dfs, bfs, astar, node_to_path, Node
 
 
 # одна конкретная ячейка лабиринта
@@ -78,6 +78,21 @@ class Maze:
             output += ''.join([c.value for c in row]) + '\n'
         return output
 
+# возвращает функцию вычисляющую расстояние по прямой до цели
+def euclidean_distance(goal: MazeLocation) -> Callable[[MazeLocation], float]:
+    def distance(ml: MazeLocation) -> float:
+        xdist: int = ml.column - goal.column
+        ydist: int = ml.row - goal.row
+        return sqrt(xdist ** 2 + ydist ** 2)
+    return distance
+
+# возвращает функцию вычисляющую расстояние до цели в "ячеечном" пространстве
+def manhattan_distance(goal: MazeLocation) -> Callable[[MazeLocation], float]:
+    def distance(ml: MazeLocation) -> float:
+        xdist: int = abs(ml.column - goal.column)
+        ydist: int = abs(ml.row - goal.row)
+        return (xdist + ydist)
+    return distance
 
 # тестирование лабиринта
 if __name__ == '__main__':
@@ -107,3 +122,15 @@ if __name__ == '__main__':
         print('===== BFS ======')
         print(m)
         m.mark(path2, clear=True)
+
+    # Тестирование A*
+    distance: Callable[[MazeLocation], float] = manhattan_distance(m.goal)
+    solution3: Optional[Node[MazeLocation]] = astar(m.start, m.goal_test, m.successors, distance)
+    if solution3 is None:
+        print('No solution found using A*!')
+    else:
+        path3: List[MazeLocation] = node_to_path(solution3)
+        m.mark(path3)
+        print('===== A* ======')
+        print(m)
+        m.mark(path3, clear=True)

@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import TypeVar, Iterable, Sequence, Generic, List, Callable, Set, Deque, Dict, Any, Optional
 from typing_extensions import Protocol
 from heapq import heappush, heappop
+from math import sqrt
 
 T = TypeVar('T')
 
@@ -164,6 +165,32 @@ def bfs(initial: T, goal_test: Callable[[T], bool], successors: Callable[[T], Li
             frontier.push(Node(child, current_node))
     return None # все состояния проверили, пути к цели не нашли
         
+def astar(initial: T, goal_test: Callable[[T], bool], successors: Callable[[T], List[T]], heuristic: Callable[[T], float]) -> Optional[Node[T]]:
+    # frontier - то, куда хотим двигаться
+    frontier: PriorityQueue[Node[T]] = PriorityQueue()
+    frontier.push(Node(initial, None, 0.0, heuristic(initial)))
+
+    # explored - то, что уже просмотрели
+    explored: Dict[T, float] = {initial: 0.0}
+
+    # продолжаем пока есть что просматривать
+    while not frontier.empty:
+        current_node: Node[T] = frontier.pop()
+        current_state: T = current_node.state
+        # если цель найдена, мы закончили
+        if goal_test(current_state):
+            return current_node
+        # проверяем в какую из неисследованных ячеек направиться
+        for child in successors(current_state):
+            new_cost: float = current_node.cost + 1
+            # 1 - для сетки, для более сложного пространства
+            # здесь должны быть функция затрат
+
+            if child not in explored or explored[child] > new_cost:
+                explored[child] = new_cost
+                frontier.push(Node(child, current_node, new_cost, heuristic(child)))
+    return None # все проверили, пути к целевой точке не нашли
+    
 
 
 if __name__ == '__main__':
