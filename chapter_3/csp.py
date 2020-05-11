@@ -42,7 +42,7 @@ class CSP(Generic[V, D]):
                 return False
         return True
 
-    def backtracking_search(self, assignment: Dict[V, D] = {}) -> Optional[Dict[v, D]]:
+    def backtracking_search(self, assignment: Dict[V, D] = {}) -> Optional[Dict[V, D]]:
         # присваивание завершено, если существует присваивание
         # для каждой переменной (базовый случай)
         if len(assignment) == len(self.variables):
